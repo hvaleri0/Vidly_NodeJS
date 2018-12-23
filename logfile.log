@@ -2,3 +2,4 @@
 {"level":"error","message":"Could not get the genres."}
 {"level":"error"}
 {"level":"error"}
+{"message":"Something failed during startup.","stack":"Error: Something failed during startup.\n    at Object.<anonymous> (C:\\Users\\Owner\\Documents\\node-course\\vidly\\index.js:35:7)\n    at Module._compile (module.js:653:30)\n    at Object.Module._extensions..js (module.js:664:10)\n    at Module.load (module.js:566:32)\n    at tryModuleLoad (module.js:506:12)\n    at Function.Module._load (module.js:498:3)\n    at Function.Module.runMain (module.js:694:10)\n    at startup (bootstrap_node.js:204:16)\n    at bootstrap_node.js:625:3","level":"error","timestamp":"2018-12-23T18:48:56.259Z"}
