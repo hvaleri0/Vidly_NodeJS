@@ -17,6 +17,12 @@ module.exports = function (){
 
 //Another way of catching exception and rejections is by using winstons built in library:
 winston.handleExceptions(
+
+    new winston.transports.Console ({
+        colorized: true,
+        prettyPrint: true
+    }),
+
     new winston.transports.File ({
         filename: 'uncaughtExceptions.log'
     })
