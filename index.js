@@ -1,22 +1,17 @@
 //require('express-async-errors') //Use this instead of middleware async handler with try catch block
 const winston = require('winston')
 require('winston-mongodb');
-const error = require('./middleware/error')
+
 const config = require('config');
 
 const mongoose = require('mongoose');
 const Joi = require('joi');
 Joi.objectId = require('joi-objectid')(Joi)
 
-const genres = require('./routes/genres');
-const customers = require('./routes/customers');
-const movies = require('./routes/movies');
-const rentals = require('./routes/rentals');
-const users = require('./routes/users');
-const auth = require('./routes/auth');
-
 const express = require('express');
 const app = express();
+
+require('./startup/routes')(app)
 
 process.on('uncaughtException', (ex) => {
     //console.log('WE GOT AN UNCAUGHT EXCEPTION');
@@ -30,7 +25,6 @@ process.on('unhandledRejection', (ex) => {
     process.exit(1); //best practice is to terminate and restart the program 
 })
 
-
 //Another way of catching exception and rejections is by using winstons built in library:
 // winston.handleExceptions(
 //     new winston.transports.File ({
@@ -42,7 +36,6 @@ process.on('unhandledRejection', (ex) => {
 //     throw ex; //no winston.unhandleRejection library but we can cheat by using the uncaught exception library
 // })
 
-
 winston.add(winston.transports.File, {
     filename: 'logfile.log'
 });
@@ -53,8 +46,9 @@ winston.add(winston.transports.MongoDB, {
 });
 
 //throw new Error('Something failed during startup.') // Synchronous exception
-const p = Promise.reject( new Error('Something failed misserably!'));
-p.then(() => console.log('Done'));
+
+// const p = Promise.reject( new Error('Something failed misserably!')); Promise rejection
+// p.then(() => console.log('Done'));
 
 if (!config.get('jwtPrivateKey')) {
     console.error('FATAL ERROR: jwtPrivateKey is not defined.');
@@ -67,14 +61,6 @@ mongoose.connect('mongodb://localhost/vidly', { useNewUrlParser: true })
 
 app.use(express.json());
 
-app.use('/api/genres', genres);
-app.use('/api/customers', customers);
-app.use('/api/movies', movies);
-app.use('/api/rentals', rentals);
-app.use('/api/users', users);
-app.use('/api/auth', auth);
-
-app.use(error);
 
 //Get Request
 app.get('/', (req, res)=>{
