@@ -1,24 +1,19 @@
-const config = require('config');
 const Joi = require('joi');
-
 Joi.objectId = require('joi-objectid')(Joi)
-
 const express = require('express');
 const app = express();
+
 
 require('./startup/logging')();
 require('./startup/routes')(app);
 require('./startup/db')();
+require('./startup/config')();
+
 
 //throw new Error('Something failed during startup.') // Synchronous exception
 
 // const p = Promise.reject( new Error('Something failed misserably!')); Promise rejection
 // p.then(() => console.log('Done'));
-
-if (!config.get('jwtPrivateKey')) {
-    console.error('FATAL ERROR: jwtPrivateKey is not defined.');
-    process.exit(1);
-}
 
 app.use(express.json());
 
