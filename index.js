@@ -1,5 +1,4 @@
-const Joi = require('joi');
-Joi.objectId = require('joi-objectid')(Joi)
+const winston = require('winston')
 const express = require('express');
 const app = express();
 
@@ -24,4 +23,4 @@ app.get('/', (req, res)=>{
 
 //listen to port
 const port = process.env.PORT || 3000;
-app.listen(port, () => console.log(`Listening on port ${port}...`));
+app.listen(port, () => winston.info(`Listening on port ${port}...`));
