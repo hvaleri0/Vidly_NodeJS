@@ -4,37 +4,38 @@ require('winston-mongodb');
 
 const config = require('config');
 
-const mongoose = require('mongoose');
+
 const Joi = require('joi');
 Joi.objectId = require('joi-objectid')(Joi)
 
 const express = require('express');
 const app = express();
 
-require('./startup/routes')(app)
+require('./startup/routes')(app);
+require('./startup/db')();
 
-process.on('uncaughtException', (ex) => {
-    //console.log('WE GOT AN UNCAUGHT EXCEPTION');
-    winston.error(ex.message,ex);
-    process.exit(1); //best practice is to terminate and restart the program 
-})
-
-process.on('unhandledRejection', (ex) => {
-    //console.log('WE GOT AN UNHANDLED REJECTION');
-    winston.error(ex.message,ex);
-    process.exit(1); //best practice is to terminate and restart the program 
-})
-
-//Another way of catching exception and rejections is by using winstons built in library:
-// winston.handleExceptions(
-//     new winston.transports.File ({
-//         filename: 'uncaughtExceptions.log'
-//     })
-// )
+// process.on('uncaughtException', (ex) => {
+//     //console.log('WE GOT AN UNCAUGHT EXCEPTION');
+//     winston.error(ex.message,ex);
+//     process.exit(1); //best practice is to terminate and restart the program 
+// })
 
 // process.on('unhandledRejection', (ex) => {
-//     throw ex; //no winston.unhandleRejection library but we can cheat by using the uncaught exception library
+//     //console.log('WE GOT AN UNHANDLED REJECTION');
+//     winston.error(ex.message,ex);
+//     process.exit(1); //best practice is to terminate and restart the program 
 // })
+
+//Another way of catching exception and rejections is by using winstons built in library:
+winston.handleExceptions(
+    new winston.transports.File ({
+        filename: 'uncaughtExceptions.log'
+    })
+)
+
+process.on('unhandledRejection', (ex) => {
+    throw ex; //no winston.unhandleRejection library but we can cheat by using the uncaught exception library
+})
 
 winston.add(winston.transports.File, {
     filename: 'logfile.log'
@@ -55,12 +56,7 @@ if (!config.get('jwtPrivateKey')) {
     process.exit(1);
 }
 
-mongoose.connect('mongodb://localhost/vidly', { useNewUrlParser: true })
-    .then(() => console.log('Connected to MongoDB...'))
-    .catch(err => console.error('Could not connect to MongoDB...'));
-
 app.use(express.json());
-
 
 //Get Request
 app.get('/', (req, res)=>{

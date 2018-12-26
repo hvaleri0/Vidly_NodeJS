@@ -3,3 +3,4 @@ Mosh Solution/
 node_modules/
 hash.js
 logfile.log
+uncaughtExceptions.log

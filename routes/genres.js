@@ -25,7 +25,7 @@ const router = express.Router();
 
 // get Request with MongoDB
 router.get('/', asyncMiddleware (async (req,res, next) => {
-    throw new Error('Could not get the genres.');
+    //throw new Error('Could not get the genres.'); // fake an error for testing
     const genres = await Genre.find().sort('name');
     res.send(genres);
 }));
