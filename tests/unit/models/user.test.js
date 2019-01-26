@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 
 describe('user.generateAuthToken', () => {
     it('should returns a valid JWT', () => {
-        const payload = { _Id: new mongoose.Types.ObjectId(), isAdmin: true}
+        const payload = {isAdmin: true}//{ _Id: new mongoose.Types.ObjectId(), isAdmin: true}
         const user = new User(payload);
         const token = user.generateAuthToken();
         const decoded = jwt.verify(token, config.get('jwtPrivateKey'))
