@@ -7,6 +7,7 @@ require('./startup/logging')();
 require('./startup/routes')(app);
 require('./startup/db')();
 require('./startup/config')();
+require('./startup/validation')();
 
 
 //throw new Error('Something failed during startup.') // Synchronous exception
