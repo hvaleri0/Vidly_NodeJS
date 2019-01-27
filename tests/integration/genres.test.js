@@ -1,5 +1,7 @@
 const request = require('supertest');
 const {Genre} = require('../../models/genre')
+const {User} = require('../../models/user')
+//const mongoose = require('mongoose')
 let server
 
 
@@ -33,7 +35,6 @@ describe('/api/genres', () => {
             
             const res = await request(server).get('/api/genres/' + genre._id);
 
-            console.log (`the _id is ${genre._id}`)
             expect(res.status).toBe(200);
             expect(res.body).toHaveProperty('name', genre.name);
             //expect(res.body).toMatchObject(genre);
@@ -50,9 +51,33 @@ describe('/api/genres', () => {
         it('should return 401 if client is not logged in', async () => {
             const res = await request(server)
                 .post('/api/genres')
-                .send({name: 'genre1'})
+                .send({ name: 'genre1' })
 
             expect(res.status).toBe(401);
+        });
+
+        it('should return 400 if genre is less than 5 characters', async () => {
+            const token = new User().generateAuthToken();
+
+            const res = await request(server)
+                .post('/api/genres')
+                .send({ 'name': '1234' })
+                .set('x-auth-token', token)
+
+            expect(res.status).toBe(400);
+        });
+
+        it('should return 400 if genre is more than 50 characters', async () => {
+            const token = new User().generateAuthToken();
+
+            const name = new Array(52).join('a');
+
+            const res = await request(server)
+                .post('/api/genres')
+                .send({ 'name': name })
+                .set('x-auth-token', token)
+
+            expect(res.status).toBe(400);
         });
     });
 })

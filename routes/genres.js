@@ -65,11 +65,11 @@ router.get('/:id', validateObjectId, asyncMiddleware (async (req, res) =>{
 // });
 
 //Post Request with MongoDB
-router.post('/', auth, asyncMiddleware (async (req,res) =>{
-    const {error} = validateGenre(req.body);
+router.post('/', auth, asyncMiddleware (async (req,res) => {
+    const { error } = validateGenre(req.body);
     if(error) return res.status(400).send(error.details[0].message);
 
-    const genre = new Genre ({name: req.body.name});
+    const genre = new Genre ({ name: req.body.name });
     await genre.save();
 
     res.send(genre);
