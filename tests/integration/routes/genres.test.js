@@ -201,7 +201,8 @@ describe('/api/genres', () => {
 
         beforeEach( async() => {
             await dbEntry();
-            id = genre.id
+            id = genre.id;
+            name = genre.name;
         })
 
         it('should return 404 if genre with the given ID was not found', async () => {
