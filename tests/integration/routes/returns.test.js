@@ -1,17 +1,24 @@
 const request = require('supertest')
-const {Rental} = require('../../models/rental');
-const {User} = require('../../models/user');
+const {Rental} = require('../../../models/rental');
+const {User} = require('../../../models/user');
 const mongoose = require('mongoose');
 
-describe('/api/return', () => {
+describe('/api/returns', () => {
     let server;
     let customerId;
     let movieId;
     let rental;
     let token;
 
+    const exec = () => {
+        return request(server)
+        .post('/api/returns')
+        .set('x-auth-token', token)
+        .send({ customerId, movieId })
+    };
+
     beforeEach( async () => { 
-        server = require ('../../index');
+        server = require ('../../../index');
         
         customerId = mongoose.Types.ObjectId().toHexString();
         movieId = mongoose.Types.ObjectId().toHexString();
@@ -45,30 +52,39 @@ describe('/api/return', () => {
     it('should return 401 if client is not logged in', async () => {
         token = '';
         
-        const res = await request(server)
-        .post('/api/returns')
-        .send({ customerId, movieId})
-        .set('x-auth-token', token)
+        const res = await exec();
 
         expect(res.status).toBe(401);
     });
 
     it('should return 400 if customerID is not provided', async () => {
-        const res = await request(server)
-        .post('/api/returns')
-        .send({ movieId })
-        .set('x-auth-token', token)
+        customerId = '';
+        
+        const res = await exec();
 
         expect(res.status).toBe(400);
     });
 
     it('should return 400 if movieID is not provided', async () => {        
-        const res = await request(server)
-        .post('/api/returns')
-        .send({ customerId })
-        .set('x-auth-token', token)
+        movieId = '';
+
+        const res = await exec();
 
         expect(res.status).toBe(400);
+    });
+
+    it('should return 404 if no rental found for the customer/movie', async () => {        
+        await Rental.remove({});
+
+        const res = await exec();
+
+        expect(res.status).toBe(404);
+    });
+
+    it('should return 400 if rental already processed', async () => {        
+        const res = await exec();
+
+        expect(res.status).toBe(404);
     });
 
 })
