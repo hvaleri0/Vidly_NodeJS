@@ -126,10 +126,22 @@ describe('/api/returns', () => {
         const rentalInDb = await Rental.findById(rental._id);
         expect(rentalInDb.rentalFee).toBe(14);
     });
+    
     it('should increase the movie stock if input is valid', async () => {        
         const res = await exec();
 
         const movieInDb = await Movie.findById(movieId);
         expect(movieInDb.numberInStock).toBe(movie.numberInStock + 1);
+    });
+
+    it('should return the rental in the body of the response if input is valid', async () => {        
+        const res = await exec();
+
+        const rentalInDb = await Rental.findById(rental._id);
+        //expect(res.body).toMatchObject(rentalInDb); // fail because of Date format
+
+        expect(Object.keys(res.body)).toEqual(
+            expect.arrayContaining(['dateOut','dateReturned', 'rentalFee', 'customer', 'movie'])
+        )
     });
 })
