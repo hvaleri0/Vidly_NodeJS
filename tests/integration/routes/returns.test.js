@@ -1,3 +1,4 @@
+const moment = require('moment');
 const request = require('supertest')
 const {Rental} = require('../../../models/rental');
 const {User} = require('../../../models/user');
@@ -89,5 +90,28 @@ describe('/api/returns', () => {
 
         expect(res.status).toBe(400);
     });
+    it('should return 200 if we have a valid Request', async () => {        
+        const res = await exec();
 
+        expect(res.status).toBe(200);
+    });
+
+    it('should set returnDate if input is valid', async () => {        
+        const res = await exec();
+
+        const rentalInDb = await Rental.findById(rental._id);
+        const diff = new Date() - rentalInDb.dateReturned;
+        expect(diff).toBeLessThan(10 * 1000);
+    });
+
+    it('should set the rentalFee if input is valid', async () => {        
+        
+        rental.dateOut = moment().add(-7, 'days').toDate();
+        await  rental.save();
+        
+        const res = await exec();
+
+        const rentalInDb = await Rental.findById(rental._id);
+        expect(rentalInDb.rentalFee).toBe(14);
+    });
 })
