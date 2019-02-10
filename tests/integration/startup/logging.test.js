@@ -1,14 +1,27 @@
-const logging = require('../../../startup/logging')
 const fs = require('fs')
 
+require('../../../startup/logging')();
+
 describe('Logging startup', () => {
-    //throw an exeption and save to 'uncaughtExceptions.log
-    it('throw an exeption and save to uncaughtExceptions.log',() => {
+
+    const exceptionError = () => {
         throw new Error ('FATAL ERROR: uncaught exception');
-        const file = fs.access(file, fs.constants.F_OK);
-        expect(file).toBeDefined();
-    })
+    }
+
+    //throw an exeption and save to 'uncaughtExceptions.log
+    it('throw an exeption and save to uncaughtExceptions.log',async () => {
+
+        let file = 'logfile.log';
+
+        expect(() => {exceptionError()}).toThrow();
+
+        const fileAccess = fs.access(file, fs.constants.F_OK, (err) => {
+            console.log(`${file} ${err ? 'does not exist' : 'exists'}`);
+        })
+
+        //expect(fileAccess).toBeDefined();
 
     //throw a rejection and save to 'uncaughtExceptions.log
 
+    })
 })
