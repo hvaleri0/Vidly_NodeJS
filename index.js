@@ -2,6 +2,7 @@ const winston = require('winston')
 const express = require('express');
 const app = express();
 
+app.use(express.json());
 
 require('./startup/logging')();
 require('./startup/routes')(app);
@@ -14,8 +15,6 @@ require('./startup/validation')();
 
 // const p = Promise.reject( new Error('Something failed misserably!')); Promise rejection
 // p.then(() => console.log('Done'));
-
-app.use(express.json());
 
 //Get Request
 app.get('/', (req, res)=>{

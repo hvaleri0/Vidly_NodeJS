@@ -1,8 +1,10 @@
 const asyncMiddleware = require('../middleware/async')
+const validateObjectId = require('../middleware/validateObjectId')
 const auth = require ('../middleware/auth')
 const admin = require ('../middleware/admin')
 const {Genre,validateGenre} = require('../models/genre')
 const express = require('express');
+const mongoose = require('mongoose')
 const router = express.Router();
 
 // const genres =[
@@ -38,9 +40,12 @@ router.get('/', asyncMiddleware (async (req,res, next) => {
 // });
 
 //get ID Request with MongoDB
-router.get('/:id', asyncMiddleware (async (req, res) =>{
+router.get('/:id', validateObjectId, asyncMiddleware (async (req, res) =>{
+    
     const genre = await Genre.findById(req.params.id)
+    
     if (!genre) return res.status(404).send('The genre with the given ID was not found') ; //404 Object not found
+    
     res.send(genre);
 }));
 
@@ -60,11 +65,11 @@ router.get('/:id', asyncMiddleware (async (req, res) =>{
 // });
 
 //Post Request with MongoDB
-router.post('/', auth, asyncMiddleware (async (req,res) =>{
-    const {error} = validateGenre(req.body);
+router.post('/', auth, asyncMiddleware (async (req,res) => {
+    const { error } = validateGenre(req.body);
     if(error) return res.status(400).send(error.details[0].message);
 
-    const genre = new Genre ({name: req.body.name});
+    const genre = new Genre ({ name: req.body.name });
     await genre.save();
 
     res.send(genre);
@@ -114,7 +119,7 @@ router.put('/:id', auth, asyncMiddleware (async (req,res) => {
 //Delete Request with MongoDB
 router.delete('/:id', [auth, admin], asyncMiddleware (async (req,res) => {
 
-    const genre = await Genre.findByIdAndRemove(req.params.id,)
+    const genre = await Genre.findByIdAndRemove(req.params.id);
 
     if (!genre) return res.status(404).send('The genre with the given ID was not found');  //404 Object not found
 
