@@ -1,5 +1,5 @@
 const winston = require('winston')
-require('winston-mongodb');
+//require('winston-mongodb');
 require('express-async-errors') //Use this instead of middleware async handler with try catch block
 
 module.exports = function () {
@@ -28,8 +28,8 @@ module.exports = function () {
 
     winston.add(winston.transports.File, {filename: 'logfile.log'});
 
-    winston.add(winston.transports.MongoDB, {
-        db: 'mongodb://localhost/vidly',
-        level: 'info' // only errror messages will be logged in database, if you set to  info - > errors, warnings and info will be logged
-    });
+    // winston.add(winston.transports.MongoDB, {
+    //     db: 'mongodb://localhost/vidly',
+    //     level: 'info' // only errror messages will be logged in database, if you set to  info - > errors, warnings and info will be logged
+    // });
 }
