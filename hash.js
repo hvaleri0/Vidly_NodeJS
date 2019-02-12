@@ -1,5 +1,5 @@
 const readline = require('readline');
-const bcrypt = require('bcrypt');
+const bcrypt   = require('bcrypt-nodejs');
 
 //1234 ->ABCD
 
