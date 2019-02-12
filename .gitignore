@@ -1,6 +1,6 @@
-.vscode/*
-Mosh Solution/*
-node_modules/*
+.vscode/
+'Mosh Solution'/*
+node_modules/
 coverage/*
 hash.js
 logfile.log
