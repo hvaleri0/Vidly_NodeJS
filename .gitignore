@@ -1,7 +1,7 @@
 .vscode/
-'Mosh Solution'/*
+Mosh_Solution/
 node_modules/
-coverage/*
+coverage/
 hash.js
 logfile.log
 uncaughtExceptions.log
