@@ -1,14 +1,14 @@
 {
   "name": "vidly",
   "version": "1.0.0",
+  "engines": {
+    "node": "8.12.0"
+  },
   "description": "",
   "main": "index.js",
   "scripts": {
     "test": "jest --watchAll --verbose  --coverage --runInBand",
     "start": "node index.js"
-  },
-  "engines": {
-    "node": "8.12.0"
   },
   "keywords": [],
   "author": "",
